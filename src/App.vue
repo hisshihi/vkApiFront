@@ -105,61 +105,61 @@ export default {
   methods: {
     // Метод для поиска пользователя, в качестве аргумента получает id пользователя из v-model
     async serchUser(id) {
-      // При получении данных отображем загрузку и убираем ошибки если они были до этого
-      this.loading = true
-      this.error = false
-      this.errorLoading = false
-      // Для отправки http запросов используем бибилиотеку axios
-      // тут создаём метод post для отправки данных на сервер, а именно отправляем id
-      axios.post('https://vkapi-8fei.onrender.com/88362341', {
-        id: id
-      }, {
+      // // При получении данных отображем загрузку и убираем ошибки если они были до этого
+      // this.loading = true
+      // this.error = false
+      // this.errorLoading = false
+      // // Для отправки http запросов используем бибилиотеку axios
+      // // тут создаём метод post для отправки данных на сервер, а именно отправляем id
+      // axios.post('https://vkapi-8fei.onrender.com/88362341', {
+      //   id: id
+      // }, {
+      //     mode: "no-cors"
+      // })
+      //     .then(response => {
+      //       console.log(response)
+      //       // останавливаем отображение загрузки
+      //       this.loading = false
+      //       this.id = null;
+      //       // проверяем, правильный ли ответ пришёл от backend
+      //       if (response.data == "OK") {
+      //         // если ответ пришёл правильный, то отправляем запрос на получение данных
+      //         axios.get("https://vkapi-8fei.onrender.com/88362341")
+      //             // Проверяем, пришёл ли массив данных не пустым, если нет, то сохраняем все данные
+      //             .then(response => {
+      //               this.userData = response.data.user != null ? this.userData = response.data.user : null
+      //               if (this.userData == null) {
+      //                 return;
+      //               }
+      //               this.userGroups = response.data.groups != null ? this.userGroups = response.data.groups : null
+      //               this.userFriend = response.data.friends != null ? this.userFriend = response.data.friends : null
+      //               // this.cities = response.data.cities != null ? this.cities = response.data.cities : null
+      //             })
+      //             // обрабатываем ошибки в случае их возникновения
+      //             .catch(error => {
+      //               this.loading = false;
+      //               this.errorLoading = true;
+      //               console.log(error)
+      //             })
+      //
+      //       }
+      //     })
+      //     .catch(error => {
+      //       this.loading = false;
+      //       this.error = true;
+      //       console.log(error)
+      //     })
 
-      })
-          .then(response => {
-            console.log(response)
-            // останавливаем отображение загрузки
-            this.loading = false
-            this.id = null;
-            // проверяем, правильный ли ответ пришёл от backend
-            if (response.data == "OK") {
-              // если ответ пришёл правильный, то отправляем запрос на получение данных
-              axios.get("https://vkapi-8fei.onrender.com/88362341")
-                  // Проверяем, пришёл ли массив данных не пустым, если нет, то сохраняем все данные
-                  .then(response => {
-                    this.userData = response.data.user != null ? this.userData = response.data.user : null
-                    if (this.userData == null) {
-                      return;
-                    }
-                    this.userGroups = response.data.groups != null ? this.userGroups = response.data.groups : null
-                    this.userFriend = response.data.friends != null ? this.userFriend = response.data.friends : null
-                    // this.cities = response.data.cities != null ? this.cities = response.data.cities : null
-                  })
-                  // обрабатываем ошибки в случае их возникновения
-                  .catch(error => {
-                    this.loading = false;
-                    this.errorLoading = true;
-                    console.log(error)
-                  })
-
-            }
-          })
-          .catch(error => {
-            this.loading = false;
-            this.error = true;
-            console.log(error)
-          })
-
-      // const response = await fetch("http://localhost:8080/88362341", {
-      //   method: "POST",
-      //   mode: "cors",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   // body: JSON.stringify({
-      //   //   id: 123456789,
-      //   // }),
-      // }).then(response => console.log(response));
+      const response = await fetch("http://localhost:8080/88362341", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        // body: JSON.stringify({
+        //   id: 123456789,
+        // }),
+      }).then(response => console.log(response));
     },
     // Метод который при нажатии  на кнопку "обновить" очищает массив данных пользователя
     newSearch() {
