@@ -101,14 +101,14 @@ export default {
       this.loading = true
       this.error = false
       this.errorLoading = false
-      axios.post('https://vkapi-8fei.onrender.com/' + id, {
+      axios.post('https://vkapi-edd17.web.app/' + id, {
         id: id
       })
           .then(response => {
             this.loading = false
             this.id = null;
             if (response.data == "OK") {
-              axios.get('https://vkapi-8fei.onrender.com/' + id)
+              axios.get('https://vkapi-edd17.web.app/' + id)
                   .then(response => {
                     this.userData = response.data.user != null ? this.userData = response.data.user : null
                     if (this.userData == null) {
