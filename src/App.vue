@@ -4,7 +4,8 @@
       <form v-if="userData.length <= 0">
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">ID пользователя</label>
-          <input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" v-model="id">
+          <input minlength="8" maxlength="9" type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                 v-model="id">
         </div>
         <button type="submit" class="btn btn-primary" @click.prevent="serchUser(id)">Поиск</button>
       </form>
@@ -14,15 +15,16 @@
           <div class="card-body">
             <h5 class="card-title">{{ userData.first_name }}</h5>
             <h5 class="card-title">{{ userData.last_name ? userData.last_name : "Не указано" }}</h5>
-            <p class="card-text">Город - {{ userData.city.title ? userData.city.title : "Не указано" }}</p>
+            <p v-if="userData.city != null" class="card-text">Город - {{ userData.city.title ? userData.city.title : "Не указано" }}</p>
             <h5 class="card-subtitle">Образование</h5>
             <p class="card-text">Форма обучения -
               {{ userData.education_status ? userData.education_status : "Не указано" }}</p>
             <p class="card-text">Факультет - {{ userData.faculty_name ? userData.faculty_name : "Не указано" }}</p>
             <p class="card-text">Место получения образования -
               {{ userData.university_name ? userData.university_name : "Не указано" }}</p>
+            <p v-if="userData.schools != null" class="card-text">Школа - {{ userData.schools.name ? userData.schools.name : "Не указано" }}</p>
             <h5 class="card-subtitle">Работа</h5>
-            <p class="card-text">Место работы -
+            <p v-if="userData.occupation != null" class="card-text">Место работы -
               {{ userData.occupation.name ? userData.occupation.name : "Не указано" }}</p>
             <button class="btn btn-primary" @click="newSearch">Обновить</button>
           </div>
@@ -58,7 +60,7 @@
                 <a v-else class="dropdown-item"
                    target="_blank"
                    :href="'https://vk.com/id' + group.groupId"
-                >{{ group.firstName }} {{group.lastName}}</a>
+                >{{ group.firstName }} {{ group.lastName }}</a>
               </li>
             </ul>
           </div>
@@ -67,6 +69,12 @@
       </template>
       <div v-if="loading">
         <h2>Пожалуйста подождите, ищем инфомрацию.</h2>
+      </div>
+      <div v-if="error">
+        <h2 class="text-danger">Неверный ввод данных! Повторите попытку поиска</h2>
+      </div>
+      <div v-if="errorLoading">
+        <h2 class="text-danger">Ошибка данных! Польлзователь не найден</h2>
       </div>
     </div>
   </div>
@@ -84,11 +92,15 @@ export default {
       userGroups: [],
       cities: [],
       loading: false,
+      error: false,
+      errorLoading: false
     }
   },
   methods: {
     serchUser(id) {
       this.loading = true
+      this.error = false
+      this.errorLoading = false
       axios.post('http://localhost:8080/' + id, {
         id: id
       })
@@ -98,20 +110,44 @@ export default {
             if (response.data == "OK") {
               axios.get('http://localhost:8080/' + id)
                   .then(response => {
-                    this.userData = response.data.user
-                    this.userGroups = response.data.groups
-                    this.userFriend = response.data.friends
-                    tis.cities = response.data.cities
-
+                    this.userData = response.data.user != null ? this.userData = response.data.user : null
+                    if (this.userData == null) {
+                      console.log("aaa")
+                      return;
+                    }
+                    this.userGroups = response.data.groups != null ? this.userGroups = response.data.groups : null
+                    this.userFriend = response.data.friends != null ? this.userFriend = response.data.friends : null
+                    // this.cities = response.data.cities != null ? this.cities = response.data.cities : null
                   })
-                  .catch(error => console.log(error))
+                  .catch(error => {
+                    this.loading = false;
+                    this.errorLoading = true;
+                    console.log(error)
+                  })
+
             }
           })
-          .catch(error => console.log(error))
+          .catch(error => {
+            this.loading = false;
+            this.error = true;
+            console.log(error)
+          })
     },
     newSearch() {
       this.userData = []
-    }
+    },
+    input() {
+      const input = document.querySelector('input')
+
+      input.addEventListener('input', (e) => {
+        if (e.target.value.length > 9) {
+          e.target.value = e.target.value.slice(0, 8)
+        }
+      })
+    },
+  },
+  mounted() {
+    this.input()
   }
 }
 </script>
