@@ -1,15 +1,18 @@
 <template>
   <div class="wrapper">
     <div class="container">
+      <!--      Првоеряем не пустой ли массив пользователя-->
       <form v-if="userData.length <= 0">
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">ID пользователя</label>
+          <!--          v-model используется для динамического связываения переменной и тем, что хранится в input-->
           <input minlength="8" maxlength="9" type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
                  v-model="id">
         </div>
         <button type="submit" class="btn btn-primary" @click.prevent="serchUser(id)">Поиск</button>
       </form>
       <template v-else>
+        <!--        Карточка с данными пользователя-->
         <div class="card">
           <h5 class="card-header">Данные</h5>
           <div class="card-body">
@@ -31,6 +34,7 @@
         </div>
 
         <div class="all-drop-down">
+          <!--          Выпадающие списки с друзьями и группами-->
           <div class="dropdown">
             <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                data-bs-toggle="dropdown" aria-expanded="false">
@@ -84,6 +88,7 @@
 import axios from "axios";
 
 export default {
+  // Переменные
   data() {
     return {
       id: null,
@@ -96,35 +101,45 @@ export default {
       errorLoading: false
     }
   },
+  // Методы приложения
   methods: {
+    // Метод для поиска пользователя, в качестве аргумента получает id пользователя из v-model
     serchUser(id) {
+      // При получении данных отображем загрузку и убираем ошибки если они были до этого
       this.loading = true
       this.error = false
       this.errorLoading = false
+      // Для отправки http запросов используем бибилиотеку axios
+      // тут создаём метод post для отправки данных на сервер, а именно отправляем id
       axios.post('https://vkapi-8fei.onrender.com/' + id, {
         id: id
       }, {
+        // это заголов того, что отправляется на сервер а именно настройки
         headers: {
-          'Access-Control-Allow-Credentials': true,
-          'Origin': 'https://vkapifront.onrender.com/'
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json',
         }
 
       })
           .then(response => {
+            // останавливаем отображение загрузки
             this.loading = false
             this.id = null;
+            // проверяем, правильный ли ответ пришёл от backend
             if (response.data == "OK") {
+              // если ответ пришёл правильный, то отправляем запрос на получение данных
               axios.get("https://vkapi-8fei.onrender.com/" + id)
+                  // Проверяем, пришёл ли массив данных не пустым, если нет, то сохраняем все данные
                   .then(response => {
                     this.userData = response.data.user != null ? this.userData = response.data.user : null
                     if (this.userData == null) {
-                      console.log("aaa")
                       return;
                     }
                     this.userGroups = response.data.groups != null ? this.userGroups = response.data.groups : null
                     this.userFriend = response.data.friends != null ? this.userFriend = response.data.friends : null
                     // this.cities = response.data.cities != null ? this.cities = response.data.cities : null
                   })
+                  // обрабатываем ошибки в случае их возникновения
                   .catch(error => {
                     this.loading = false;
                     this.errorLoading = true;
@@ -139,9 +154,11 @@ export default {
             console.log(error)
           })
     },
+    // Метод который при нажатии  на кнопку "обновить" очищает массив данных пользователя
     newSearch() {
       this.userData = []
     },
+    // метод, который проверяет, сколько символов было введено в input, если больше 9, то остальные урезаются
     input() {
       const input = document.querySelector('input')
 
@@ -152,6 +169,7 @@ export default {
       })
     },
   },
+  // mounted обозначает, что метод input загружается во время обновления/создания страницы
   mounted() {
     this.input()
   }
