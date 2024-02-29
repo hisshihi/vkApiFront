@@ -111,7 +111,7 @@ export default {
       this.errorLoading = false
       // Для отправки http запросов используем бибилиотеку axios
       // тут создаём метод post для отправки данных на сервер, а именно отправляем id
-      axios.post('https://vkapi-8fei.onrender.com/' + id, {
+      axios.post('https://vkapi-8fei.onrender.com/88362341', {
         id: id
       }, {
         // это заголов того, что отправляется на сервер а именно настройки
@@ -128,7 +128,7 @@ export default {
             // проверяем, правильный ли ответ пришёл от backend
             if (response.data == "OK") {
               // если ответ пришёл правильный, то отправляем запрос на получение данных
-              axios.get("https://vkapi-8fei.onrender.com/" + id)
+              axios.get("https://vkapi-8fei.onrender.com/88362341")
                   // Проверяем, пришёл ли массив данных не пустым, если нет, то сохраняем все данные
                   .then(response => {
                     this.userData = response.data.user != null ? this.userData = response.data.user : null
