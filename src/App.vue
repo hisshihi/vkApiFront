@@ -101,14 +101,16 @@ export default {
       this.loading = true
       this.error = false
       this.errorLoading = false
-      axios.post('https://vkapi-edd17.web.app/' + id, {
+      axios.post('https://vkapi-8fei.onrender.com/' + id, {
         id: id
+      }, {
+        withCredentials: true
       })
           .then(response => {
             this.loading = false
             this.id = null;
             if (response.data == "OK") {
-              axios.get('https://vkapi-edd17.web.app/' + id)
+              axios.get('https://vkapi-8fei.onrender.com/' + id)
                   .then(response => {
                     this.userData = response.data.user != null ? this.userData = response.data.user : null
                     if (this.userData == null) {
