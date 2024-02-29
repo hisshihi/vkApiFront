@@ -104,7 +104,7 @@ export default {
   // Методы приложения
   methods: {
     // Метод для поиска пользователя, в качестве аргумента получает id пользователя из v-model
-    serchUser(id) {
+    async serchUser(id) {
       // При получении данных отображем загрузку и убираем ошибки если они были до этого
       this.loading = true
       this.error = false
@@ -114,14 +114,10 @@ export default {
       axios.post('https://vkapi-8fei.onrender.com/88362341', {
         id: id
       }, {
-        // это заголов того, что отправляется на сервер а именно настройки
-        headers: {
-          // 'Access-Control-Allow-Origin': '*',
-          // 'Content-Type': 'application/json',
-        }
 
       })
           .then(response => {
+            console.log(response)
             // останавливаем отображение загрузки
             this.loading = false
             this.id = null;
@@ -153,6 +149,17 @@ export default {
             this.error = true;
             console.log(error)
           })
+
+      // const response = await fetch("http://localhost:8080/88362341", {
+      //   method: "POST",
+      //   mode: "cors",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   // body: JSON.stringify({
+      //   //   id: 123456789,
+      //   // }),
+      // }).then(response => console.log(response));
     },
     // Метод который при нажатии  на кнопку "обновить" очищает массив данных пользователя
     newSearch() {
