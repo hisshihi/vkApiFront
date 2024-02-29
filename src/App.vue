@@ -24,7 +24,7 @@
             <h5 class="card-subtitle">Работа</h5>
             <p class="card-text">Место работы -
               {{ userData.occupation.name ? userData.occupation.name : "Не указано" }}</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
+            <button class="btn btn-primary" @click="newSearch">Обновить</button>
           </div>
         </div>
 
@@ -94,6 +94,7 @@ export default {
       })
           .then(response => {
             this.loading = false
+            this.id = null;
             if (response.data == "OK") {
               axios.get('http://localhost:8080/' + id)
                   .then(response => {
@@ -107,6 +108,9 @@ export default {
             }
           })
           .catch(error => console.log(error))
+    },
+    newSearch() {
+      this.userData = []
     }
   }
 }
