@@ -172,12 +172,11 @@ export default {
   margin-top: 20px;
 }
 
-// Выпадающий список
 
 .all-drop-down {
   display: flex !important;
-  justify-content: space-between !important;;
-  margin-top: 50px !important;;
+  justify-content: space-between !important;
+  margin-top: 50px !important;
 }
 
 .dropdown {
