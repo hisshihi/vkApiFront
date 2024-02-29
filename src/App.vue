@@ -104,7 +104,7 @@ export default {
       axios.post('https://vkapi-8fei.onrender.com/' + id, {
         id: id
       }, {
-
+        headers: {'Access-Control-Allow-Credentials':true}
 
       })
           .then(response => {
