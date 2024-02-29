@@ -116,8 +116,8 @@ export default {
       }, {
         // это заголов того, что отправляется на сервер а именно настройки
         headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/json',
+          // 'Access-Control-Allow-Origin': '*',
+          // 'Content-Type': 'application/json',
         }
 
       })
