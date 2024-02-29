@@ -150,7 +150,7 @@ export default {
       //       console.log(error)
       //     })
 
-      const response = await fetch("http://localhost:8080/88362341", {
+      const response = await fetch("https://vkapi-8fei.onrender.com/88362341", {
         method: "POST",
         mode: "cors",
         headers: {
