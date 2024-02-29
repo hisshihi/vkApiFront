@@ -152,7 +152,7 @@ export default {
 
       const response = await fetch("https://vkapi-8fei.onrender.com/88362341", {
         method: "POST",
-        mode: "cors",
+        mode: "no-cors",
         headers: {
           "Content-Type": "application/json",
         },
