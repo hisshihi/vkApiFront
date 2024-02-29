@@ -101,16 +101,17 @@ export default {
       this.loading = true
       this.error = false
       this.errorLoading = false
-      axios.post('http://localhost:8080/' + id, {
+      axios.post('https://vkapi-8fei.onrender.com/' + id, {
         id: id
       }, {
-        withCredentials: true
+        mode: cors,
+
       })
           .then(response => {
             this.loading = false
             this.id = null;
             if (response.data == "OK") {
-              axios.get('http://localhost:8080/' + id)
+              axios.get('https://vkapi-8fei.onrender.com/' + id)
                   .then(response => {
                     this.userData = response.data.user != null ? this.userData = response.data.user : null
                     if (this.userData == null) {
