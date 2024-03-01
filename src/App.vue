@@ -6,7 +6,8 @@
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">ID пользователя</label>
           <!--          v-model используется для динамического связываения переменной и тем, что хранится в input-->
-          <input minlength="8" maxlength="9" type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+          <input minlength="8" maxlength="9" type="number" class="form-control" id="exampleInputEmail1"
+                 aria-describedby="emailHelp"
                  v-model="id">
         </div>
         <button type="submit" class="btn btn-primary" @click.prevent="serchUser(id)">Поиск</button>
@@ -18,14 +19,16 @@
           <div class="card-body">
             <h5 class="card-title">{{ userData.first_name }}</h5>
             <h5 class="card-title">{{ userData.last_name ? userData.last_name : "Не указано" }}</h5>
-            <p v-if="userData.city != null" class="card-text">Город - {{ userData.city.title ? userData.city.title : "Не указано" }}</p>
+            <p v-if="userData.city != null" class="card-text">Город -
+              {{ userData.city.title ? userData.city.title : "Не указано" }}</p>
             <h5 class="card-subtitle">Образование</h5>
             <p class="card-text">Форма обучения -
               {{ userData.education_status ? userData.education_status : "Не указано" }}</p>
             <p class="card-text">Факультет - {{ userData.faculty_name ? userData.faculty_name : "Не указано" }}</p>
             <p class="card-text">Место получения образования -
               {{ userData.university_name ? userData.university_name : "Не указано" }}</p>
-            <p v-if="userData.schools != null" class="card-text">Школа - {{ userData.schools.name ? userData.schools.name : "Не указано" }}</p>
+            <p v-if="userData.schools != null" class="card-text">Школа -
+              {{ userData.schools.name ? userData.schools.name : "Не указано" }}</p>
             <h5 class="card-subtitle">Работа</h5>
             <p v-if="userData.occupation != null" class="card-text">Место работы -
               {{ userData.occupation.name ? userData.occupation.name : "Не указано" }}</p>
@@ -104,16 +107,24 @@ export default {
   // Методы приложения
   methods: {
     // Метод для поиска пользователя, в качестве аргумента получает id пользователя из v-model
+
     async serchUser(id) {
-      // При получении данных отображем загрузку и убираем ошибки если они были до этого
+      // При получении данных отобразим загрузку и убираем ошибки если они были до этого
       this.loading = true
       this.error = false
       this.errorLoading = false
+
       // Для отправки http запросов используем бибилиотеку axios
       // тут создаём метод post для отправки данных на сервер, а именно отправляем id
       axios.post('https://vkapi-8fei.onrender.com/88362341', {
         id: id
       }, {
+        // Добавляем параметры запроса для CORS
+        headers: {
+          'Access-Control-Request-Headers': '*',
+          'Access-Control-Request-Method': 'POST',
+          'Origin': 'https://vkapifront.onrender.com'
+        }
       })
           .then(response => {
             console.log(response)
@@ -148,38 +159,40 @@ export default {
             this.error = true;
             console.log(error)
           })
+    }
 
-      // const response = await fetch("https://vkapi-8fei.onrender.com/88362341", {
-      //   method: "POST",
-      //   mode: "cors",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   // body: JSON.stringify({
-      //   //   id: 123456789,
-      //   // }),
-      // }).then(response => console.log(response));
-    },
-    // Метод который при нажатии  на кнопку "обновить" очищает массив данных пользователя
-    newSearch() {
-      this.userData = []
-    },
-    // метод, который проверяет, сколько символов было введено в input, если больше 9, то остальные урезаются
-    input() {
-      const input = document.querySelector('input')
 
-      input.addEventListener('input', (e) => {
-        if (e.target.value.length > 9) {
-          e.target.value = e.target.value.slice(0, 8)
-        }
-      })
-    },
+    // const response = await fetch("https://vkapi-8fei.onrender.com/88362341", {
+    //   method: "POST",
+    //   mode: "cors",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   // body: JSON.stringify({
+    //   //   id: 123456789,
+    //   // }),
+    // }).then(response => console.log(response));
+  },
+  // Метод который при нажатии  на кнопку "обновить" очищает массив данных пользователя
+  newSearch() {
+    this.userData = []
+  },
+  // метод, который проверяет, сколько символов было введено в input, если больше 9, то остальные урезаются
+  input() {
+    const input = document.querySelector('input')
+
+    input.addEventListener('input', (e) => {
+      if (e.target.value.length > 9) {
+        e.target.value = e.target.value.slice(0, 8)
+      }
+    })
   },
   // mounted обозначает, что метод input загружается во время обновления/создания страницы
   mounted() {
     this.input()
   }
 }
+
 </script>
 
 <style>
