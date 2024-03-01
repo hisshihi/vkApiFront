@@ -122,6 +122,7 @@ export default {
         // Добавляем параметры запроса для CORS
         headers: {
           'Access-Control-Request-Headers': '*',
+          'Access-Control-Allow-Origin': "*",
           'Access-Control-Request-Method': 'POST',
           'Origin': 'https://vkapifront.onrender.com'
         }
