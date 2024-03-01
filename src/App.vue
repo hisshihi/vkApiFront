@@ -114,7 +114,6 @@ export default {
       axios.post('https://vkapi-8fei.onrender.com/88362341', {
         id: id
       }, {
-          mode: "no-cors"
       })
           .then(response => {
             console.log(response)
