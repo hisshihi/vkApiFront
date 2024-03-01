@@ -122,7 +122,6 @@ export default {
         // Добавляем параметры запроса для CORS
         headers: {
           'Access-Control-Allow-Origin': 'https://vkapi-8fei.onrender.com',
-          'Access-Control-Request-Method': 'POST',
           'Content-Type': 'application/json'
         }
       })
