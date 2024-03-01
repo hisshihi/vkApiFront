@@ -121,10 +121,9 @@ export default {
       }, {
         // Добавляем параметры запроса для CORS
         headers: {
-          'Access-Control-Request-Headers': '*',
-          'Access-Control-Allow-Origin': "*",
+          'Access-Control-Allow-Origin': 'https://vkapi-8fei.onrender.com',
           'Access-Control-Request-Method': 'POST',
-          'Origin': 'https://vkapifront.onrender.com'
+          'Content-Type': 'application/json'
         }
       })
           .then(response => {
@@ -174,6 +173,10 @@ export default {
     //   // }),
     // }).then(response => console.log(response));
   },
+  // mounted обозначает, что метод input загружается во время обновления/создания страницы
+  mounted() {
+    this.input()
+  },
   // Метод который при нажатии  на кнопку "обновить" очищает массив данных пользователя
   newSearch() {
     this.userData = []
@@ -188,10 +191,6 @@ export default {
       }
     })
   },
-  // mounted обозначает, что метод input загружается во время обновления/создания страницы
-  mounted() {
-    this.input()
-  }
 }
 
 </script>
