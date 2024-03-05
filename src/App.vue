@@ -1,86 +1,87 @@
 <template>
   <div class="wrapper">
-    <div class="container">
-      <!--      Првоеряем не пустой ли массив пользователя-->
-      <form v-if="userData.length <= 0">
-        <div class="mb-3">
-          <label for="exampleInputEmail1" class="form-label">ID пользователя</label>
-          <!--          v-model используется для динамического связываения переменной и тем, что хранится в input-->
-          <input minlength="8" maxlength="9" type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                 v-model="id">
-        </div>
-        <button type="submit" class="btn btn-primary" @click.prevent="testResuetMethod()">Поиск</button>
-      </form>
-      <template v-else>
-        <!--        Карточка с данными пользователя-->
-        <div class="card">
-          <h5 class="card-header">Данные</h5>
-          <div class="card-body">
-            <h5 class="card-title">{{ userData.first_name }}</h5>
-            <h5 class="card-title">{{ userData.last_name ? userData.last_name : "Не указано" }}</h5>
-            <p v-if="userData.city != null" class="card-text">Город - {{ userData.city.title ? userData.city.title : "Не указано" }}</p>
-            <h5 class="card-subtitle">Образование</h5>
-            <p class="card-text">Форма обучения -
-              {{ userData.education_status ? userData.education_status : "Не указано" }}</p>
-            <p class="card-text">Факультет - {{ userData.faculty_name ? userData.faculty_name : "Не указано" }}</p>
-            <p class="card-text">Место получения образования -
-              {{ userData.university_name ? userData.university_name : "Не указано" }}</p>
-            <p v-if="userData.schools != null" class="card-text">Школа - {{ userData.schools.name ? userData.schools.name : "Не указано" }}</p>
-            <h5 class="card-subtitle">Работа</h5>
-            <p v-if="userData.occupation != null" class="card-text">Место работы -
-              {{ userData.occupation.name ? userData.occupation.name : "Не указано" }}</p>
-            <button class="btn btn-primary" @click="newSearch">Обновить</button>
-          </div>
-        </div>
+    <button @click.prevent="testResuetMethod">Test</button>
+<!--    <div class="container">-->
+<!--      &lt;!&ndash;      Првоеряем не пустой ли массив пользователя&ndash;&gt;-->
+<!--      <form v-if="userData.length <= 0">-->
+<!--        <div class="mb-3">-->
+<!--          <label for="exampleInputEmail1" class="form-label">ID пользователя</label>-->
+<!--          &lt;!&ndash;          v-model используется для динамического связываения переменной и тем, что хранится в input&ndash;&gt;-->
+<!--          <input minlength="8" maxlength="9" type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"-->
+<!--                 v-model="id">-->
+<!--        </div>-->
+<!--        <button type="submit" class="btn btn-primary" @click.prevent="testResuetMethod">Поиск</button>-->
+<!--      </form>-->
+<!--      <template v-else>-->
+<!--        &lt;!&ndash;        Карточка с данными пользователя&ndash;&gt;-->
+<!--        <div class="card">-->
+<!--          <h5 class="card-header">Данные</h5>-->
+<!--          <div class="card-body">-->
+<!--            <h5 class="card-title">{{ userData.first_name }}</h5>-->
+<!--            <h5 class="card-title">{{ userData.last_name ? userData.last_name : "Не указано" }}</h5>-->
+<!--            <p v-if="userData.city != null" class="card-text">Город - {{ userData.city.title ? userData.city.title : "Не указано" }}</p>-->
+<!--            <h5 class="card-subtitle">Образование</h5>-->
+<!--            <p class="card-text">Форма обучения - -->
+<!--              {{ userData.education_status ? userData.education_status : "Не указано" }}</p>-->
+<!--            <p class="card-text">Факультет - {{ userData.faculty_name ? userData.faculty_name : "Не указано" }}</p>-->
+<!--            <p class="card-text">Место получения образования - -->
+<!--              {{ userData.university_name ? userData.university_name : "Не указано" }}</p>-->
+<!--            <p v-if="userData.schools != null" class="card-text">Школа - {{ userData.schools.name ? userData.schools.name : "Не указано" }}</p>-->
+<!--            <h5 class="card-subtitle">Работа</h5>-->
+<!--            <p v-if="userData.occupation != null" class="card-text">Место работы - -->
+<!--              {{ userData.occupation.name ? userData.occupation.name : "Не указано" }}</p>-->
+<!--            <button class="btn btn-primary" @click="newSearch">Обновить</button>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <div class="all-drop-down">
-          <!--          Выпадающие списки с друзьями и группами-->
-          <div class="dropdown">
-            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-               data-bs-toggle="dropdown" aria-expanded="false">
-              Друзья
-            </a>
+<!--        <div class="all-drop-down">-->
+<!--          &lt;!&ndash;          Выпадающие списки с друзьями и группами&ndash;&gt;-->
+<!--          <div class="dropdown">-->
+<!--            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"-->
+<!--               data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--              Друзья-->
+<!--            </a>-->
 
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <li v-for="friend in userFriend" :key="friend.id"><a class="dropdown-item"
-                                                                   target="_blank"
-                                                                   :href="'https://vk.com/id' + friend.friendId"
-              >{{ friend.firstName }} {{ friend.lastName }}</a>
-              </li>
-            </ul>
-          </div>
-          <div class="dropdown">
-            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-               data-bs-toggle="dropdown" aria-expanded="false">
-              Группы
-            </a>
+<!--            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">-->
+<!--              <li v-for="friend in userFriend" :key="friend.id"><a class="dropdown-item"-->
+<!--                                                                   target="_blank"-->
+<!--                                                                   :href="'https://vk.com/id' + friend.friendId"-->
+<!--              >{{ friend.firstName }} {{ friend.lastName }}</a>-->
+<!--              </li>-->
+<!--            </ul>-->
+<!--          </div>-->
+<!--          <div class="dropdown">-->
+<!--            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"-->
+<!--               data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--              Группы-->
+<!--            </a>-->
 
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <li v-for="group in userGroups" :key="group.id">
-                <a v-if="group.name != null" class="dropdown-item"
-                   target="_blank"
-                   :href="'https://vk.com/id' + group.groupId"
-                >{{ group.name }}</a>
-                <a v-else class="dropdown-item"
-                   target="_blank"
-                   :href="'https://vk.com/id' + group.groupId"
-                >{{ group.firstName }} {{ group.lastName }}</a>
-              </li>
-            </ul>
-          </div>
-        </div>
+<!--            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">-->
+<!--              <li v-for="group in userGroups" :key="group.id">-->
+<!--                <a v-if="group.name != null" class="dropdown-item"-->
+<!--                   target="_blank"-->
+<!--                   :href="'https://vk.com/id' + group.groupId"-->
+<!--                >{{ group.name }}</a>-->
+<!--                <a v-else class="dropdown-item"-->
+<!--                   target="_blank"-->
+<!--                   :href="'https://vk.com/id' + group.groupId"-->
+<!--                >{{ group.firstName }} {{ group.lastName }}</a>-->
+<!--              </li>-->
+<!--            </ul>-->
+<!--          </div>-->
+<!--        </div>-->
 
-      </template>
-      <div v-if="loading">
-        <h2>Пожалуйста подождите, ищем инфомрацию.</h2>
-      </div>
-      <div v-if="error">
-        <h2 class="text-danger">Неверный ввод данных! Повторите попытку поиска</h2>
-      </div>
-      <div v-if="errorLoading">
-        <h2 class="text-danger">Ошибка данных! Польлзователь не найден</h2>
-      </div>
-    </div>
+<!--      </template>-->
+<!--      <div v-if="loading">-->
+<!--        <h2>Пожалуйста подождите, ищем инфомрацию.</h2>-->
+<!--      </div>-->
+<!--      <div v-if="error">-->
+<!--        <h2 class="text-danger">Неверный ввод данных! Повторите попытку поиска</h2>-->
+<!--      </div>-->
+<!--      <div v-if="errorLoading">-->
+<!--        <h2 class="text-danger">Ошибка данных! Польлзователь не найден</h2>-->
+<!--      </div>-->
+<!--    </div>-->
   </div>
 </template>
 
@@ -157,24 +158,24 @@ export default {
           .catch(error => console.log(error))
     },
     // Метод который при нажатии  на кнопку "обновить" очищает массив данных пользователя
-    newSearch() {
-      this.userData = []
-    },
+    // newSearch() {
+    //   this.userData = []
+    // },
     // метод, который проверяет, сколько символов было введено в input, если больше 9, то остальные урезаются
-    input() {
-      const input = document.querySelector('input')
-
-      input.addEventListener('input', (e) => {
-        if (e.target.value.length > 9) {
-          e.target.value = e.target.value.slice(0, 8)
-        }
-      })
-    },
+    // input() {
+    //   const input = document.querySelector('input')
+    //
+    //   input.addEventListener('input', (e) => {
+    //     if (e.target.value.length > 9) {
+    //       e.target.value = e.target.value.slice(0, 8)
+    //     }
+    //   })
+    // },
   },
   // mounted обозначает, что метод input загружается во время обновления/создания страницы
-  mounted() {
-    this.input()
-  }
+  // mounted() {
+  //   this.input()
+  // }
 }
 </script>
 
