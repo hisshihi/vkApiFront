@@ -6,11 +6,10 @@
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">ID пользователя</label>
           <!--          v-model используется для динамического связываения переменной и тем, что хранится в input-->
-          <input minlength="8" maxlength="9" type="number" class="form-control" id="exampleInputEmail1"
-                 aria-describedby="emailHelp"
+          <input minlength="8" maxlength="9" type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
                  v-model="id">
         </div>
-        <button type="submit" class="btn btn-primary" @click.prevent="serchUser(id)">Поиск</button>
+        <button type="submit" class="btn btn-primary" @click.prevent="testResuetMethod()">Поиск</button>
       </form>
       <template v-else>
         <!--        Карточка с данными пользователя-->
@@ -19,16 +18,14 @@
           <div class="card-body">
             <h5 class="card-title">{{ userData.first_name }}</h5>
             <h5 class="card-title">{{ userData.last_name ? userData.last_name : "Не указано" }}</h5>
-            <p v-if="userData.city != null" class="card-text">Город -
-              {{ userData.city.title ? userData.city.title : "Не указано" }}</p>
+            <p v-if="userData.city != null" class="card-text">Город - {{ userData.city.title ? userData.city.title : "Не указано" }}</p>
             <h5 class="card-subtitle">Образование</h5>
             <p class="card-text">Форма обучения -
               {{ userData.education_status ? userData.education_status : "Не указано" }}</p>
             <p class="card-text">Факультет - {{ userData.faculty_name ? userData.faculty_name : "Не указано" }}</p>
             <p class="card-text">Место получения образования -
               {{ userData.university_name ? userData.university_name : "Не указано" }}</p>
-            <p v-if="userData.schools != null" class="card-text">Школа -
-              {{ userData.schools.name ? userData.schools.name : "Не указано" }}</p>
+            <p v-if="userData.schools != null" class="card-text">Школа - {{ userData.schools.name ? userData.schools.name : "Не указано" }}</p>
             <h5 class="card-subtitle">Работа</h5>
             <p v-if="userData.occupation != null" class="card-text">Место работы -
               {{ userData.occupation.name ? userData.occupation.name : "Не указано" }}</p>
@@ -107,90 +104,78 @@ export default {
   // Методы приложения
   methods: {
     // Метод для поиска пользователя, в качестве аргумента получает id пользователя из v-model
+    // serchUser(id) {
+    //   // При получении данных отображем загрузку и убираем ошибки если они были до этого
+    //   this.loading = true
+    //   this.error = false
+    //   this.errorLoading = false
+    //   // Для отправки http запросов используем бибилиотеку axios
+    //   // тут создаём метод post для отправки данных на сервер, а именно отправляем id
+    //   axios.post('https://joyful-language-production.up.railway.app/' + id, {
+    //     id: id
+    //   })
+    //       .then(response => {
+    //         console.log(response)
+    //         // останавливаем отображение загрузки
+    //         this.loading = false
+    //         this.id = null;
+    //         // проверяем, правильный ли ответ пришёл от backend
+    //         if (response.data == "OK") {
+    //           // если ответ пришёл правильный, то отправляем запрос на получение данных
+    //           axios.get("https://joyful-language-production.up.railway.app/" + id)
+    //               // Проверяем, пришёл ли массив данных не пустым, если нет, то сохраняем все данные
+    //               .then(response => {
+    //                 this.userData = response.data.user != null ? this.userData = response.data.user : null
+    //                 if (this.userData == null) {
+    //                   return;
+    //                 }
+    //                 this.userGroups = response.data.groups != null ? this.userGroups = response.data.groups : null
+    //                 this.userFriend = response.data.friends != null ? this.userFriend = response.data.friends : null
+    //                 // this.cities = response.data.cities != null ? this.cities = response.data.cities : null
+    //               })
+    //               // обрабатываем ошибки в случае их возникновения
+    //               .catch(error => {
+    //                 this.loading = false;
+    //                 this.errorLoading = true;
+    //                 console.log(error)
+    //               })
+    //
+    //         }
+    //       })
+    //       .catch(error => {
+    //         this.loading = false;
+    //         this.error = true;
+    //         console.log(error)
+    //       })
+    //
+    // },
+    testResuetMethod() {
+      axios.post("https://demo-production-6867.up.railway.app/users", {
+        id: "234234"
+      })
+          .then(response => console.log(response))
+          .catch(error => console.log(error))
+    },
+    // Метод который при нажатии  на кнопку "обновить" очищает массив данных пользователя
+    newSearch() {
+      this.userData = []
+    },
+    // метод, который проверяет, сколько символов было введено в input, если больше 9, то остальные урезаются
+    input() {
+      const input = document.querySelector('input')
 
-    async serchUser(id) {
-      // При получении данных отобразим загрузку и убираем ошибки если они были до этого
-      this.loading = true
-      this.error = false
-      this.errorLoading = false
-
-      // Для отправки http запросов используем бибилиотеку axios
-      // тут создаём метод post для отправки данных на сервер, а именно отправляем id
-      axios.post('https://vkapi-8fei.onrender.com/88362341', {
-        id: id
-      }, {
-        // Добавляем параметры запроса для CORS
-        headers: {
-          'Content-Type': 'application/json'
+      input.addEventListener('input', (e) => {
+        if (e.target.value.length > 9) {
+          e.target.value = e.target.value.slice(0, 8)
         }
       })
-          .then(response => {
-            console.log(response)
-            // останавливаем отображение загрузки
-            this.loading = false
-            this.id = null;
-            // проверяем, правильный ли ответ пришёл от backend
-            if (response.data == "OK") {
-              // если ответ пришёл правильный, то отправляем запрос на получение данных
-              axios.get("https://vkapi-8fei.onrender.com/88362341")
-                  // Проверяем, пришёл ли массив данных не пустым, если нет, то сохраняем все данные
-                  .then(response => {
-                    this.userData = response.data.user != null ? this.userData = response.data.user : null
-                    if (this.userData == null) {
-                      return;
-                    }
-                    this.userGroups = response.data.groups != null ? this.userGroups = response.data.groups : null
-                    this.userFriend = response.data.friends != null ? this.userFriend = response.data.friends : null
-                    // this.cities = response.data.cities != null ? this.cities = response.data.cities : null
-                  })
-                  // обрабатываем ошибки в случае их возникновения
-                  .catch(error => {
-                    this.loading = false;
-                    this.errorLoading = true;
-                    console.log(error)
-                  })
-
-            }
-          })
-          .catch(error => {
-            this.loading = false;
-            this.error = true;
-            console.log(error)
-          })
-    }
-
-
-    // const response = await fetch("https://vkapi-8fei.onrender.com/88362341", {
-    //   method: "POST",
-    //   mode: "cors",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   // body: JSON.stringify({
-    //   //   id: 123456789,
-    //   // }),
-    // }).then(response => console.log(response));
+    },
   },
   // mounted обозначает, что метод input загружается во время обновления/создания страницы
   mounted() {
     this.input()
-  },
-  // Метод который при нажатии  на кнопку "обновить" очищает массив данных пользователя
-  newSearch() {
-    this.userData = []
-  },
-  // метод, который проверяет, сколько символов было введено в input, если больше 9, то остальные урезаются
-  input() {
-    const input = document.querySelector('input')
-
-    input.addEventListener('input', (e) => {
-      if (e.target.value.length > 9) {
-        e.target.value = e.target.value.slice(0, 8)
-      }
-    })
-  },
+  }
 }
-
 </script>
 
 <style>
