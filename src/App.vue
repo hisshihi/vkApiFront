@@ -1,6 +1,7 @@
 <template>
   <div class="wrapper">
     <button @click.prevent="testResuetMethod">Test</button>
+    <button @click.prevent="getUserDataFromBackend">Получить данные</button>
 <!--    <div class="container">-->
 <!--      &lt;!&ndash;      Првоеряем не пустой ли массив пользователя&ndash;&gt;-->
 <!--      <form v-if="userData.length <= 0">-->
@@ -151,12 +152,17 @@ export default {
     //
     // },
     testResuetMethod() {
-      axios.post("https://demo-production-6867.up.railway.app/users", {
-        id: "234234"
+      axios.post("https://demo-production-fdd8.up.railway.app/users", {
+        id: "88362341"
       })
           .then(response => console.log(response))
           .catch(error => console.log(error))
     },
+    getUserDataFromBackend() {
+      axios.get("https://demo-production-fdd8.up.railway.app/users/88362341")
+          .then(response => console.log(response))
+          .catch(error => console.log(error))
+    }
     // Метод который при нажатии  на кнопку "обновить" очищает массив данных пользователя
     // newSearch() {
     //   this.userData = []
