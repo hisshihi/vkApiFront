@@ -152,14 +152,14 @@ export default {
     //
     // },
     testResuetMethod() {
-      axios.post("https://demo-production-fdd8.up.railway.app/users", {
+      axios.post("https://demo-production-fdd8.up.railway.app/user", {
         id: "88362341"
       })
           .then(response => console.log(response))
           .catch(error => console.log(error))
     },
     getUserDataFromBackend() {
-      axios.get("https://demo-production-fdd8.up.railway.app/users/88362341")
+      axios.get("https://demo-production-fdd8.up.railway.app/user/88362341")
           .then(response => console.log(response))
           .catch(error => console.log(error))
     }
