@@ -7,18 +7,16 @@
     onkeydown="if (event.keyCode == 13) event.preventDefault();"
   >
     ID:&nbsp;<input
-      type="number"
+      type="text"
       name="id"
-      value="${user.id}"
-      placeholder="${user.id}"
+      placeholder="id пользователя"
     />
     <br />
     <br />
     <input
       class="button-controller"
       id="button"
-      type="checkbox"
-      onclick="document.querySelector('#warn').style='initial';document.querySelector('#form').submit();"
+      type="submit"
     />
 
     <label tabindex="0" for="button" class="button"> Начать </label>
@@ -30,9 +28,9 @@
     </div>
   </form>
   <br />
-  <form method="post" action="app?action=history">
+  <!-- <form method="post" action="app?action=history">
     <div><button type="submit" class="btn_type2">История</button></div>
-  </form>
+  </form> -->
 </template>
 
 <script></script>

@@ -63,10 +63,10 @@
       </ul>
     </div>
 
-    <div class="save-btn">
+    <!-- <div class="save-btn">
       <button class="btn_type2"></button>
       <div id="data" style="display: none">${data}</div>
-    </div>
+    </div> -->
     <button @click.prevent="testResuetMethod">Test</button>
     <button @click.prevent="getUserDataFromBackend">Получить данные</button>
     <!--    <div class="container">-->
