@@ -3,8 +3,6 @@
     text-align="center"
     id="form"
     method="post"
-    action="app?action=submit"
-    onkeydown="if (event.keyCode == 13) event.preventDefault();"
   >
     ID:&nbsp;<input
       type="text"
