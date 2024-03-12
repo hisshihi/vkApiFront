@@ -23,11 +23,13 @@
           />
 
           <label tabindex="0" for="button" class="button" @click.prevent="testResuetMethod"> Начать </label>
-          <div id="warn" style="display: none">
+          <div id="warn" style="display: block">
             <br/>
             <br/>
-            Подождите немного пока данные загружаются!
-            <br/>Это может занять несколько минут
+            <div v-if="loading">
+              Подождите немного пока данные загружаются!
+              <br/>Это может занять несколько минут
+            </div>
           </div>
         </form>
       </div>
@@ -51,19 +53,19 @@
             <td></td>
           </tr>
           <tr>
-            <td class="field">Город: {{ cityTitle }}</td>
+            <td class="field">Город: {{ cityTitle ? cityTitle : "Не указано" }}</td>
             <td></td>
           </tr>
           <tr>
-            <td class="field">Работа: {{ occupation }}</td>
+            <td class="field">Работа: {{ occupation ? occupation : "Не указано" }}</td>
             <td></td>
           </tr>
           <tr>
-            <td class="field">Университет: {{ userData.university_name }}</td>
+            <td class="field">Университет: {{ userData.university_name ? userData.university_name : "Не указано" }}</td>
             <td></td>
           </tr>
           <tr>
-            <td class="field">Школа: {{ school }}</td>
+            <td class="field">Школа: {{ school ? school : "Не указано" }}</td>
             <td></td>
           </tr>
           <tr v-if="userData._closed == false">
@@ -102,14 +104,22 @@
             </ul>
           </li>
 
-          <li>
-            <div><a href="#">Совпадения кол.</a></div>
-            <ul></ul>
+          <li style="display: block">
+            <div style="display: block"><a href="#">Совпадения</a></div>
+            <div v-for="friend in userFriend" :key="friend.id">
+              <div v-if="friend"></div>
+            </div>
           </li>
         </ul>
       </template>
     </div>
-
+    <div v-for="friend in userFriend" :key="friend.id">
+      <div v-if="friend.occupation">
+<!--        <div v-if="userData.occupation.name === friend.occupation.name">friend.occupation</div>-->
+<!--        {{userData.occupation.name === friend[friend.id].occupation.name}}-->
+        {{friend.occupation.name}}
+      </div>
+    </div>
   </div>
 </template>
 
@@ -138,11 +148,13 @@ export default {
       profile: null,
       showFriends: false,
       showGroups: false,
+      count: 0,
     };
   },
   // Методы приложения
   methods: {
     testResuetMethod() {
+      this.loading = true;
       axios
           .post("http://localhost:8080/user", {
             id: this.id,
@@ -158,15 +170,23 @@ export default {
       axios
           .get("http://localhost:8080/user/" + id)
           .then((response) => {
+            this.loading = false;
             this.id = null
             this.userData = response.data.user;
             this.userFriend = response.data.friends;
             // console.log(this.userFriend)
             this.userGroups = response.data.groups;
-            console.log(this.userGroups)
+            // console.log(this.userData)
             this.cityTitle = this.userData.city.title
             this.occupation = this.userData.occupation.name
             this.school = this.userData.schools.name
+            for (let i = 0; i <= this.userFriend.length; i++) {
+
+              if (this.userFriend[i].occupation !== null) {
+                this.count++;
+              }
+              console.log(this.count)
+            }
           })
           .catch((error) => console.log(error));
     },
