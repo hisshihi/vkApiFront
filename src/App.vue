@@ -119,6 +119,7 @@
        <div v-if="userData.city.title === friend.city">{{ friend.firstName }} {{ friend.lastName }} - {{ friend.city }}</div>
       </div> -->
       <!-- end -->
+
       <!-- Совпадение друзей по учёбе -->
       <!-- <div v-if="friend.schools">
         <div v-for="friendSchool in friend.schools">
@@ -131,7 +132,11 @@
         {{ friend.firstName }} {{ friend.lastName }} - {{ friend.education }}
       </div> -->
       <!-- end -->
-      
+
+      <!-- Отображение совпадений по работе -->
+      <!-- <div v-if="friend.occupation === occupation">
+        {{ friend.firstName }} {{ friend.lastName }} - {{ friend.occupation }}
+      </div> -->
     </div>
   </div>
 </template>
