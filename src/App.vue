@@ -114,11 +114,24 @@
       </template>
     </div>
     <div v-for="friend in userFriend" :key="friend.id">
-      <div v-if="friend.occupation">
-<!--        <div v-if="userData.occupation.name === friend.occupation.name">friend.occupation</div>-->
-<!--        {{userData.occupation.name === friend[friend.id].occupation.name}}-->
-        {{friend.occupation.name}}
+      <!-- Совпадение друзей по городам -->
+      <!-- <div v-if="friend.city">
+       <div v-if="userData.city.title === friend.city">{{ friend.firstName }} {{ friend.lastName }} - {{ friend.city }}</div>
+      </div> -->
+      <!-- end -->
+      <!-- Совпадение друзей по учёбе -->
+      <!-- <div v-if="friend.schools">
+        <div v-for="friendSchool in friend.schools">
+            <div v-if="school === friendSchool">
+              {{ friend.firstName }} {{ friend.lastName }} - {{ school }}
+            </div>
+        </div>
       </div>
+      <div v-if="userData.university_name === friend.education">
+        {{ friend.firstName }} {{ friend.lastName }} - {{ friend.education }}
+      </div> -->
+      <!-- end -->
+      
     </div>
   </div>
 </template>
