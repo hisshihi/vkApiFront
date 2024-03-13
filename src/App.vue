@@ -30,6 +30,9 @@
               Подождите немного пока данные загружаются!
               <br/>Это может занять несколько минут
             </div>
+            <div v-if="errorSearch">
+              Ошибка загрузки данных, повторите попытку!
+            </div>
           </div>
         </form>
       </div>
@@ -81,7 +84,7 @@
         <div id="button">
           <input class="button-controller" id="button" type="checkbox"/>
 
-          <a href="app?action=update" tabindex="0" for="button" class="button">
+          <a href="" @click="newSearchUser" tabindex="0" for="button" class="button">
             Обновить
           </a>
         </div>
@@ -158,7 +161,7 @@ export default {
       userGroups: [],
       cities: [],
       loading: false,
-      error: false,
+      errorSearch: false,
       errorLoading: false,
       cityTitle: null,
       occupation: null,
@@ -173,6 +176,7 @@ export default {
   methods: {
     testResuetMethod() {
       this.loading = true;
+      this.errorSearch = false;
       axios
           .post("http://localhost:8080/user", {
             id: this.id,
@@ -182,7 +186,10 @@ export default {
               this.getUserDataFromBackend(this.id)
             }
           })
-          .catch((error) => console.log(error));
+          .catch((error) => {
+            this.errorSearch = true;
+            this.loading = false;
+          });
     },
     getUserDataFromBackend(id) {
       axios
@@ -207,6 +214,9 @@ export default {
             }
           })
           .catch((error) => console.log(error));
+    },
+    newSearchUser() {
+      this.userData = null;
     },
 
   },
