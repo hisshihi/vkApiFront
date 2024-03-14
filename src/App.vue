@@ -2,33 +2,36 @@
   <div class="wrapper">
     <div class="container">
       <!--      Input form-->
-      <div class="form-user" style="margin-top: 50px; text-align: center" v-if="userData.length === 0">
-        <form
-            text-align="center"
-            id="form"
-            method="post"
-        >
+      <div
+        class="form-user"
+        style="margin-top: 50px; text-align: center"
+        v-if="userData.length === 0"
+      >
+        <form text-align="center" id="form" method="post">
           ID:&nbsp;<input
             type="text"
             name="id"
             placeholder="id пользователя"
             v-model="id"
-        />
-          <br/>
-          <br/>
-          <input
-              class="button-controller"
-              id="button"
-              type="submit"
           />
+          <br />
+          <br />
+          <input class="button-controller" id="button" type="submit" />
 
-          <label tabindex="0" for="button" class="button" @click.prevent="testResuetMethod"> Начать </label>
+          <label
+            tabindex="0"
+            for="button"
+            class="button"
+            @click.prevent="testResuetMethod"
+          >
+            Начать
+          </label>
           <div id="warn" style="display: block">
-            <br/>
-            <br/>
+            <br />
+            <br />
             <div v-if="loading">
               Подождите немного пока данные загружаются!
-              <br/>Это может занять несколько минут
+              <br />Это может занять несколько минут
             </div>
             <div v-if="errorSearch">
               Ошибка загрузки данных, повторите попытку!
@@ -36,7 +39,7 @@
           </div>
         </form>
       </div>
-      <br/>
+      <br />
       <!-- <form method="post" action="app?action=history">
         <div><button type="submit" class="btn_type2">История</button></div>
       </form> -->
@@ -52,19 +55,32 @@
             <td id="id"></td>
           </tr>
           <tr>
-            <td class="field">Имя: {{ userData.first_name }} {{ userData.last_name }}</td>
+            <td class="field">
+              Имя: {{ userData.first_name }} {{ userData.last_name }}
+            </td>
             <td></td>
           </tr>
           <tr>
-            <td class="field">Город: {{ cityTitle ? cityTitle : "Не указано" }}</td>
+            <td class="field">
+              Город: {{ cityTitle ? cityTitle : "Не указано" }}
+            </td>
             <td></td>
           </tr>
           <tr>
-            <td class="field">Работа: {{ occupation ? occupation : "Не указано" }}</td>
+            <td class="field">
+              Работа: {{ occupation ? occupation : "Не указано" }}
+            </td>
             <td></td>
           </tr>
           <tr>
-            <td class="field">Университет: {{ userData.university_name ? userData.university_name : "Не указано" }}</td>
+            <td class="field">
+              Университет:
+              {{
+                userData.university_name
+                  ? userData.university_name
+                  : "Не указано"
+              }}
+            </td>
             <td></td>
           </tr>
           <tr>
@@ -82,35 +98,88 @@
         </table>
 
         <div id="button">
-          <input class="button-controller" id="button" type="checkbox"/>
+          <input class="button-controller" id="button" type="checkbox" />
 
-          <a href="" @click="newSearchUser" tabindex="0" for="button" class="button">
+          <a
+            href=""
+            @click="newSearchUser"
+            tabindex="0"
+            for="button"
+            class="button"
+          >
             Обновить
           </a>
         </div>
 
         <ul id="menu">
           <li>
-            <div @click="showGroups = !showGroups">Группы {{ userGroups.length }}</div>
+            <div @click="showGroups = !showGroups">
+              Группы {{ userGroups.length }}
+            </div>
             <ul v-if="showGroups">
               <li v-for="group in userGroups" :key="group.id">
-                  <a href="" target="_blank">{{ group.name }}</a>
+                <a href="" target="_blank">{{ group.name }}</a>
               </li>
             </ul>
           </li>
 
           <li>
-            <div @click="showFriends = !showFriends">Друзья {{ userFriend.length }}</div>
+            <div @click="showFriends = !showFriends">
+              Друзья {{ userFriend.length }}
+            </div>
             <ul v-if="showFriends">
-              <li v-for="friend in userFriend" :key="friend.id"><a
-                  :href="'https://vk.com/id' + friend.friendId" target="_blank">{{ friend.firstName }} {{ friend.lastName }}</a></li>
+              <li v-for="friend in userFriend" :key="friend.id">
+                <a :href="'https://vk.com/id' + friend.friendId" target="_blank"
+                  >{{ friend.firstName }} {{ friend.lastName }}</a
+                >
+              </li>
             </ul>
           </li>
 
           <li style="display: block">
-            <div style="display: block"><a href="#">Совпадения</a></div>
-            <div v-for="friend in userFriend" :key="friend.id">
-              <div v-if="friend"></div>
+            <div @click="coincidences = !coincidences" style="display: block">
+              <a href="#">Совпадения</a>
+            </div>
+            <div v-if="coincidences">
+              <!-- Совпадение друзей по городам -->
+              <div>
+                <p @click="coincidencesCity = !coincidencesCity">По городам</p>
+                <template v-if="coincidencesCity">
+                  <div v-for="friend in userFriend" :key="friend.id">
+                    <!-- Совпадение друзей по городам -->
+                    <div v-if="friend.city">
+                      <div v-if="userData.city.title === friend.city">
+                        {{ friend.firstName }} {{ friend.lastName }} -
+                        {{ friend.city }}
+                      </div>
+                    </div>
+                    <!-- end -->
+                  </div>
+                </template>
+              </div>
+              <!-- end -->
+
+              <!-- Совпадение друзей по учёбе -->
+              <div v-if="school !== null">
+                <p @click="coincidencesSchool = !coincidencesSchool">
+                  По учёбе
+                </p>
+                <template v-if="coincidencesSchool">
+                  <div v-for="friend in userFriend" :key="friend.id">
+                    <div v-if="friend.schools">
+                      <div v-for="friendSchool in friend.schools" :key="friendSchool.id">
+                        <div v-if="school === friendSchool">
+                          {{ friend.firstName }} {{ friend.lastName }} -
+                          {{ school }}
+                        </div>
+                      </div>
+                    </div>
+                    <div v-if="userData.university_name === friend.education">
+                      {{ friend.firstName }} {{ friend.lastName }} -{{ friend.education }}
+                    </div>
+                  </div>
+                </template>
+              </div>
             </div>
           </li>
         </ul>
@@ -140,6 +209,10 @@
       <!-- <div v-if="friend.occupation === occupation">
         {{ friend.firstName }} {{ friend.lastName }} - {{ friend.occupation }}
       </div> -->
+
+      <!-- Совпадения по группам -->
+      <div></div>
+      <!-- end -->
     </div>
   </div>
 </template>
@@ -170,6 +243,9 @@ export default {
       showFriends: false,
       showGroups: false,
       count: 0,
+      coincidences: false,
+      coincidencesCity: false,
+      coincidencesSchool: false,
     };
   },
   // Методы приложения
@@ -178,54 +254,50 @@ export default {
       this.loading = true;
       this.errorSearch = false;
       axios
-          .post("http://localhost:8080/user", {
-            id: this.id,
-          })
-          .then((response) => {
-            if (response.data == "OK") {
-              this.getUserDataFromBackend(this.id)
-            }
-          })
-          .catch((error) => {
-            this.errorSearch = true;
-            this.loading = false;
-          });
+        .post("http://localhost:8080/user", {
+          id: this.id,
+        })
+        .then((response) => {
+          if (response.data == "OK") {
+            this.getUserDataFromBackend(this.id);
+          }
+        })
+        .catch((error) => {
+          this.errorSearch = true;
+          this.loading = false;
+        });
     },
     getUserDataFromBackend(id) {
       axios
-          .get("http://localhost:8080/user/" + id)
-          .then((response) => {
-            this.loading = false;
-            this.id = null
-            this.userData = response.data.user;
-            this.userFriend = response.data.friends;
-            // console.log(this.userFriend)
-            this.userGroups = response.data.groups;
-            // console.log(this.userData)
-            this.cityTitle = this.userData.city.title
-            this.occupation = this.userData.occupation.name
-            this.school = this.userData.schools.name
-            for (let i = 0; i <= this.userFriend.length; i++) {
-
-              if (this.userFriend[i].occupation !== null) {
-                this.count++;
-              }
-              console.log(this.count)
+        .get("http://localhost:8080/user/" + id)
+        .then((response) => {
+          this.loading = false;
+          this.id = null;
+          this.userData = response.data.user;
+          this.userFriend = response.data.friends;
+          // console.log(this.userFriend)
+          this.userGroups = response.data.groups;
+          // console.log(this.userData)
+          this.cityTitle = this.userData.city.title;
+          this.occupation = this.userData.occupation.name;
+          this.school = this.userData.schools.name;
+          for (let i = 0; i <= this.userFriend.length; i++) {
+            if (this.userFriend[i].occupation !== null) {
+              this.count++;
             }
-          })
-          .catch((error) => console.log(error));
+            console.log(this.count);
+          }
+        })
+        .catch((error) => console.log(error));
     },
     newSearchUser() {
       this.userData = null;
     },
-
   },
-
 };
 </script>
 
 <style>
-
 @import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css");
 
 .button {
@@ -381,7 +453,9 @@ body {
   font-family: sans-serif;
 }
 
-*, ::after, ::before {
+*,
+::after,
+::before {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -457,8 +531,7 @@ ul {
   color: #999;
 }
 
-* html #menu li a:hover /* IE6 */
-{
+* html #menu li a:hover /* IE6 */ {
   color: #313c57;
 }
 
@@ -517,8 +590,7 @@ ul {
   font-family: sans-serif;
 } */
 
-
-// Стили для формы
+/* Стили для формы */
 .form-user {
   margin-top: 50px;
 }
