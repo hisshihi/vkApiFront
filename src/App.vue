@@ -2,11 +2,13 @@
   <div class="wrapper">
     <div class="container">
       <!--      Input form-->
+      <!-- Данный контейнер отображает форму для поиска пользователя, по условию если массив данных пуст, то отображается форма -->
       <div
         class="form-user"
         style="margin-top: 50px; text-align: center"
         v-if="userData.length === 0"
       >
+        <!-- С помощью v-model данные динамически попадают в переменную -->
         <form text-align="center" id="form" method="post">
           ID:&nbsp;<input
             type="text"
@@ -18,6 +20,7 @@
           <br />
           <input class="button-controller" id="button" type="submit" />
 
+          <!-- @click.prevent="testResuetMethod" событие клика для отправки данных без обновления страницы -->
           <label
             tabindex="0"
             for="button"
@@ -29,6 +32,7 @@
           <div id="warn" style="display: block">
             <br />
             <br />
+            <!-- Если возникает какая-то ошибка при загрузке данных, то выводится сообщение -->
             <div v-if="loading">
               Подождите немного пока данные загружаются!
               <br />Это может занять несколько минут
@@ -40,15 +44,13 @@
         </form>
       </div>
       <br />
-      <!-- <form method="post" action="app?action=history">
-        <div><button type="submit" class="btn_type2">История</button></div>
-      </form> -->
 
+      <!-- Если длинна массива данных не равна 0 то выводится вся информация о пользователе -->
       <template v-if="userData.length !== 0">
         <div class="row">
           <h1>Информация о человеке</h1>
         </div>
-
+        <!-- Вывод всех основных данных -->
         <table>
           <tr>
             <td class="field">ID: {{ userData.userId }}</td>
@@ -73,6 +75,7 @@
             <td></td>
           </tr>
           <tr>
+            <!-- Тернарный оператор который обозначает, что если userData.university_name(или подобные данные) не пуст то выводим данные, иначе выводим "Не указано" -->
             <td class="field">
               Университет:
               {{
@@ -87,6 +90,7 @@
             <td class="field">Школа: {{ school ? school : "Не указано" }}</td>
             <td></td>
           </tr>
+          <!-- Условие по которому будет отображаться информация -->
           <tr v-if="userData._closed == false">
             <td class="field">Тип профиля: Открытый</td>
             <td></td>
@@ -100,6 +104,7 @@
         <div id="button">
           <input class="button-controller" id="button" type="checkbox" />
 
+          <!-- Кнопка для обновлённого поиска пользователя -->
           <a
             href=""
             @click="newSearchUser"
@@ -113,16 +118,29 @@
 
         <ul id="menu">
           <li>
+            <!-- Отображение всех групп пользователя -->
             <div @click="showGroups = !showGroups">
               Группы {{ userGroups.length }}
             </div>
             <ul v-if="showGroups">
+              <!-- С помощью цикла идёт отображение данных из массива -->
               <li v-for="group in userGroups" :key="group.id">
-                <a href="" target="_blank">{{ group.name }}</a>
+                <div v-if="group.name">
+                  <a
+                    :href="'https://vk.com/' + group.screenName"
+                    target="_blank"
+                    >{{ group.name }}</a
+                  >
+                </div>
+                <div v-else>
+                  <a :href="'https://vk.com/id' + group.groupId" target="_blank"
+                    >{{ group.firstName }} {{ group.lastName }}</a
+                  >
+                </div>
               </li>
             </ul>
           </li>
-
+          <!-- По клику или наведению будут данные либо отобржааться либо нет -->
           <li>
             <div @click="showFriends = !showFriends">
               Друзья {{ userFriend.length }}
@@ -144,13 +162,21 @@
               <!-- Совпадение друзей по городам -->
               <div>
                 <p @click="coincidencesCity = !coincidencesCity">По городам</p>
+                <!-- Если вывод не равен null то выводим данные циклом -->
                 <template v-if="coincidencesCity">
                   <div v-for="friend in userFriend" :key="friend.id">
                     <!-- Совпадение друзей по городам -->
+                    <!-- Если данные(в данном случае город) не равен null то выводим данные -->
                     <div v-if="friend.city">
+                      <!-- Сравниваем если город пользователя равен городу друга то выводим этот город -->
                       <div v-if="userData.city.title === friend.city">
-                        {{ friend.firstName }} {{ friend.lastName }} -
-                        {{ friend.city }}
+                        <a
+                          :href="'https://vk.com/id' + friend.friendId"
+                          target="_blank"
+                        >
+                          {{ friend.firstName }} {{ friend.lastName }} -
+                          {{ friend.city }}
+                        </a>
                       </div>
                     </div>
                     <!-- end -->
@@ -167,15 +193,78 @@
                 <template v-if="coincidencesSchool">
                   <div v-for="friend in userFriend" :key="friend.id">
                     <div v-if="friend.schools">
-                      <div v-for="friendSchool in friend.schools" :key="friendSchool.id">
+                      <div
+                        v-for="friendSchool in friend.schools"
+                        :key="friendSchool.id"
+                      >
                         <div v-if="school === friendSchool">
-                          {{ friend.firstName }} {{ friend.lastName }} -
-                          {{ school }}
+                          <a
+                            :href="'https://vk.com/id' + friend.friendId"
+                            target="_blank"
+                          >
+                            {{ friend.firstName }} {{ friend.lastName }} -
+                            {{ school }}
+                          </a>
                         </div>
                       </div>
                     </div>
                     <div v-if="userData.university_name === friend.education">
-                      {{ friend.firstName }} {{ friend.lastName }} -{{ friend.education }}
+                      <a
+                        :href="'https://vk.com/id' + friend.friendId"
+                        target="_blank"
+                      >
+                        {{ friend.firstName }} {{ friend.lastName }} -{{
+                          friend.education
+                        }}
+                      </a>
+                    </div>
+                  </div>
+                </template>
+              </div>
+
+              <!-- Совпадение друзей по работе -->
+              <div v-if="occupation !== null">
+                <p @click="coincidencesWork = !coincidencesWork">По работе</p>
+                <template v-if="coincidencesWork">
+                  <div v-for="friend in userFriend" :key="friend.id">
+                    <div v-if="friend.occupation">
+                      <div v-if="occupation === friend.occupation">
+                        <a
+                          :href="'https://vk.com/id' + friend.friendId"
+                          target="_blank"
+                          >{{ friend.firstName }} {{ friend.lastName }} -
+                          {{ friend.occupation }}</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+
+              <!-- Совпадения по группам -->
+              <div v-if="friendGroups !== null">
+                <p @click="coincidencesGroups = !coincidencesGroups">
+                  По группам
+                </p>
+                <template v-if="coincidencesGroups">
+                  <div v-for="groups in friendGroups" :key="groups.id">
+                    <div v-if="groups.firstName !== null">
+                      <a
+                        :href="'https://vk.com/id' + groups.id"
+                        target="_blank"
+                      >
+                        {{ groups.firstName }} {{ groups.lastName }} -
+                        {{ groups.friendFirstName }} {{ groups.lastName }}
+                      </a>
+                    </div>
+                    <div v-else>
+                      <a
+                        :href="'https://vk.com/' + groups.screenName"
+                        target="_blank"
+                      >
+                        {{ groups.name }} - {{ groups.friendFirstName }}
+                        {{ groups.lastName }}
+                      </a>
                     </div>
                   </div>
                 </template>
@@ -185,121 +274,112 @@
         </ul>
       </template>
     </div>
-    <div v-for="friend in userFriend" :key="friend.id">
-      <!-- Совпадение друзей по городам -->
-      <!-- <div v-if="friend.city">
-       <div v-if="userData.city.title === friend.city">{{ friend.firstName }} {{ friend.lastName }} - {{ friend.city }}</div>
-      </div> -->
-      <!-- end -->
-
-      <!-- Совпадение друзей по учёбе -->
-      <!-- <div v-if="friend.schools">
-        <div v-for="friendSchool in friend.schools">
-            <div v-if="school === friendSchool">
-              {{ friend.firstName }} {{ friend.lastName }} - {{ school }}
-            </div>
-        </div>
-      </div>
-      <div v-if="userData.university_name === friend.education">
-        {{ friend.firstName }} {{ friend.lastName }} - {{ friend.education }}
-      </div> -->
-      <!-- end -->
-
-      <!-- Отображение совпадений по работе -->
-      <!-- <div v-if="friend.occupation === occupation">
-        {{ friend.firstName }} {{ friend.lastName }} - {{ friend.occupation }}
-      </div> -->
-
-      <!-- Совпадения по группам -->
-      <div></div>
-      <!-- end -->
-    </div>
   </div>
 </template>
 
 <script>
+// Импортируем axios для сообщений между стороной пользователя и сервера
 import axios from "axios";
-import InputComponent from "@/components/InputComponent.vue";
 
 export default {
-  components: {
-    InputComponent,
-  },
   // Переменные
   data() {
     return {
+      // id пользователя
       id: null,
+      // Данные пользователя
       userData: [],
+      // Друзья
       userFriend: [],
+      // Группы
       userGroups: [],
+      // Города
       cities: [],
+      // Загрузка
       loading: false,
+      // Вывод ошибок
       errorSearch: false,
       errorLoading: false,
+      // Заголовок города
       cityTitle: null,
+      // Работа
       occupation: null,
+      // Школа
       school: null,
+      // Профиль
       profile: null,
+      // Отображение друзей
       showFriends: false,
+      // Отображение групп
       showGroups: false,
-      count: 0,
+      // Переменные для отображения данных по клику
       coincidences: false,
       coincidencesCity: false,
       coincidencesSchool: false,
+      coincidencesWork: false,
+      // Массив групп друзей
+      friendGroups: [],
+      // Также переменная для отображения групп
+      coincidencesGroups: false,
     };
   },
   // Методы приложения
   methods: {
+    // Метод для отправки id пользователя
     testResuetMethod() {
+      // Отображаем загрузку
       this.loading = true;
+      // Убираем отображение ошибки
       this.errorSearch = false;
+      // Метод для отправки данных на нужный url
       axios
-        .post("http://localhost:8080/user", {
-          id: this.id,
-        })
+        .post("http://localhost:8080/user?id=" + this.id)
+        // Если всё отлично то отправляем OK и вызываем другой метод и передаём в качестве аргумента id
         .then((response) => {
           if (response.data == "OK") {
             this.getUserDataFromBackend(this.id);
           }
         })
+        // Если что-то пошло не так, то отображаем ошибку
         .catch((error) => {
           this.errorSearch = true;
           this.loading = false;
         });
     },
+    // Метод для принятия данных со стороны сервера
     getUserDataFromBackend(id) {
+      // Отправляем get запрос на поиск пользователя по id
       axios
         .get("http://localhost:8080/user/" + id)
         .then((response) => {
+          // Убираем индикатор загрузки
           this.loading = false;
+          // Устанавливаем id в null чтобы очистить переменную
           this.id = null;
+          // Заполняем массивы и переменные из ответа axios
           this.userData = response.data.user;
+          this.friendGroups = response.data.friendGroups;
           this.userFriend = response.data.friends;
-          // console.log(this.userFriend)
           this.userGroups = response.data.groups;
-          // console.log(this.userData)
           this.cityTitle = this.userData.city.title;
           this.occupation = this.userData.occupation.name;
           this.school = this.userData.schools.name;
-          for (let i = 0; i <= this.userFriend.length; i++) {
-            if (this.userFriend[i].occupation !== null) {
-              this.count++;
-            }
-            console.log(this.count);
-          }
         })
         .catch((error) => console.log(error));
     },
+    // При поиске нового пользователя очищаем массив данных пользователя
     newSearchUser() {
-      this.userData = null;
+      this.userData.length = 0;
     },
   },
 };
 </script>
 
 <style>
+/* Импорт шрифта */
 @import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css");
 
+/* Стили для кнопки */
 .button {
   color: #fff;
   cursor: pointer;
@@ -310,15 +390,18 @@ export default {
   background-color: #25365e;
 }
 
+/* Стиль кнопки при наведении */
 .button:hover {
   background-color: #313c57;
 }
 
+/* Стиль кнопки при нажатии */
 .button:active,
 .button:focus {
   background-color: #313c57;
 }
 
+/* .button::before и .button::after - это псевдоэлементы, которые используются для добавления специальных эффектов к кнопкам. */
 .button::before {
   left: 0;
   z-index: 2;
@@ -360,6 +443,8 @@ export default {
   visibility: visible;
 }
 
+/* @-moz-keyframes, @-webkit-keyframes, @-o-keyframes, @keyframes - Эти правила определяют анимацию loading-animation, которая используется для создания эффекта загрузки.
+ Разные версии правил предназначены для обеспечения совместимости с различными браузерами. */
 @-moz-keyframes loading-animation {
   0% {
     opacity: 1;
@@ -445,6 +530,7 @@ export default {
   margin: 1rem 2rem;
 }
 
+/* Стили для body сайта */
 body {
   color: #fff;
   display: flex;
@@ -453,6 +539,7 @@ body {
   font-family: sans-serif;
 }
 
+/* Убирает у всех компонентов внутренние и внешние отступы а также на ширину блока не влияет padding и border. */
 *,
 ::after,
 ::before {
@@ -466,7 +553,7 @@ body {
   margin: 0 auto;
   align-content: center;
 }
-
+/* Заголовок */
 h1 {
   text-align: center;
   border-radius: 6px;
@@ -475,6 +562,7 @@ h1 {
   background: #25365e;
 }
 
+/* Стили для таблицы */
 table,
 td {
   border-bottom: 2px solid #313c57;
@@ -505,6 +593,7 @@ ul {
   padding-inline-start: 0;
 }
 
+/* Стили для тега меню */
 #menu {
   list-style-type: none;
   background: #25365e;
