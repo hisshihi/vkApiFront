@@ -801,7 +801,7 @@
               testResuetMethod() {
                 (this.loading = !0),
                   (this.errorSearch = !1),
-                  Ce.A.post("http://localhost:8080/user?id=" + this.id)
+                  Ce.A.post("https://vkapi-hiss.amvera.io/user?id=" + this.id)
                     .then((e) => {
                       "OK" == e.data && this.getUserDataFromBackend(this.id);
                     })
@@ -810,7 +810,7 @@
                     });
               },
               getUserDataFromBackend(e) {
-                Ce.A.get("http://localhost:8080/user/" + e)
+                Ce.A.get("https://vkapi-hiss.amvera.io/user/" + e)
                   .then((e) => {
                     (this.loading = !1),
                       (this.id = null),

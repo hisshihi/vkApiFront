@@ -333,7 +333,7 @@ export default {
       this.errorSearch = false;
       // Метод для отправки данных на нужный url
       axios
-        .post("http://localhost:8080/user?id=" + this.id)
+        .post("https://vkapi-hiss.amvera.io/user?id=" + this.id)
         // Если всё отлично то отправляем OK и вызываем другой метод и передаём в качестве аргумента id
         .then((response) => {
           if (response.data == "OK") {
@@ -350,7 +350,7 @@ export default {
     getUserDataFromBackend(id) {
       // Отправляем get запрос на поиск пользователя по id
       axios
-        .get("http://localhost:8080/user/" + id)
+        .get("https://vkapi-hiss.amvera.io/user/" + id)
         .then((response) => {
           // Убираем индикатор загрузки
           this.loading = false;
