@@ -801,10 +801,7 @@
               testResuetMethod() {
                 (this.loading = !0),
                   (this.errorSearch = !1),
-                  Ce.A.post(
-                    "https://demo-production-c0a0.up.railway.app/user?id=" +
-                      this.id
-                  )
+                  Ce.A.post("http://localhost:8080/user?id=" + this.id)
                     .then((e) => {
                       "OK" == e.data && this.getUserDataFromBackend(this.id);
                     })
@@ -813,9 +810,7 @@
                     });
               },
               getUserDataFromBackend(e) {
-                Ce.A.get(
-                  "https://demo-production-c0a0.up.railway.app/user/" + e
-                )
+                Ce.A.get("http://localhost:8080/user/" + e)
                   .then((e) => {
                     (this.loading = !1),
                       (this.id = null),

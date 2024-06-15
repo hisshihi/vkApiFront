@@ -333,7 +333,7 @@ export default {
       this.errorSearch = false;
       // Метод для отправки данных на нужный url
       axios
-        .post("https://demo-production-c0a0.up.railway.app/user?id=" + this.id)
+        .post("http://localhost:8080/user?id=" + this.id)
         // Если всё отлично то отправляем OK и вызываем другой метод и передаём в качестве аргумента id
         .then((response) => {
           if (response.data == "OK") {
@@ -350,7 +350,7 @@ export default {
     getUserDataFromBackend(id) {
       // Отправляем get запрос на поиск пользователя по id
       axios
-        .get("https://demo-production-c0a0.up.railway.app/user/" + id)
+        .get("http://localhost:8080/user/" + id)
         .then((response) => {
           // Убираем индикатор загрузки
           this.loading = false;
